@@ -57,7 +57,7 @@
   #include "EventRecorder.h"
 #endif
 
-//#include "bsp_uart_fifo.h"
+#include "bsp_uart_fifo.h"
 #include "bsp_led.h"
 #include "bsp_timer.h"
 #include "bsp_key.h"
@@ -67,6 +67,6 @@
 
 void bsp_Idle(void);
 void bsp_Init(void);
-static void NVIC_Configuration(void);
+//static void NVIC_Configuration(void);
 
 #endif // _BSP_H_
