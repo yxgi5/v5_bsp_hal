@@ -61,6 +61,8 @@
 #include "bsp_led.h"
 #include "bsp_timer.h"
 #include "bsp_key.h"
+#include "bsp_i2c.h"
+#include "bsp_i2c_eeprom_24xx.h"
 //#include "bsp_exti.h"
 //#include "bsp_modbus.h"
 //#include "bsp_user_lib.h"
@@ -68,5 +70,6 @@
 void bsp_Idle(void);
 void bsp_Init(void);
 //static void NVIC_Configuration(void);
+void Error_Handler(char *file, uint32_t line);
 
 #endif // _BSP_H_

@@ -233,6 +233,11 @@ UART_T *ComToUart(COM_PORT_E _ucPort)
       return 0;
     #endif
   }
+	else
+	{
+		Error_Handler(__FILE__, __LINE__);
+		return 0;
+	}
 }
 
 /*

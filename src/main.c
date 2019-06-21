@@ -1,159 +1,181 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
-  * @file    main.c
-  * @author  Ac6
-  * @version V1.0
-  * @date    01-December-2013
-  * @brief   Default main function.
+  * @file           : main.c
+  * @brief          : Main program body
   ******************************************************************************
-*/
+  * @attention
+  *
+  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * All rights reserved.</center></h2>
+  *
+  * This software component is licensed by ST under BSD 3-Clause license,
+  * the "License"; You may not use this file except in compliance with the
+  * License. You may obtain a copy of the License at:
+  *                        opensource.org/licenses/BSD-3-Clause
+  *
+  ******************************************************************************
+  */
+/* USER CODE END Header */
 
-
+/* Includes ------------------------------------------------------------------*/
 #include "bsp.h"
 
-#define EXAMPLE_NAME  "V5-基于Systick滴答定时器的多组软件定时器实现"
-#define EXAMPLE_DATE  "2018-12-12"
-#define DEMO_VER    "1.0"
+/* Private includes ----------------------------------------------------------*/
+/* USER CODE BEGIN Includes */
 
-static void PrintfLogo(void);
-static void PrintfHelp(void);
+/* USER CODE END Includes */
 
+/* Private typedef -----------------------------------------------------------*/
+/* USER CODE BEGIN PTD */
 
-/*
-*********************************************************************************************************
-* 函 数 名: main
-* 功能说明: c程序入口
-* 形    参: 无
-* 返 回 值: 错误代码(无需处理)
-*********************************************************************************************************
-*/
+/* USER CODE END PTD */
+
+/* Private define ------------------------------------------------------------*/
+/* USER CODE BEGIN PD */
+
+/* USER CODE END PD */
+
+/* Private macro -------------------------------------------------------------*/
+/* USER CODE BEGIN PM */
+
+/* USER CODE END PM */
+
+/* Private variables ---------------------------------------------------------*/
+I2C_HandleTypeDef hi2c1;
+I2C_HandleTypeDef hi2c2;
+
+SPI_HandleTypeDef hspi1;
+
+/* USER CODE BEGIN PV */
+
+/* USER CODE END PV */
+
+/* Private function prototypes -----------------------------------------------*/
+//void SystemClock_Config(void);
+/* USER CODE BEGIN PFP */
+
+/* USER CODE END PFP */
+
+/* Private user code ---------------------------------------------------------*/
+/* USER CODE BEGIN 0 */
+
+/* USER CODE END 0 */
+
+/**
+  * @brief  The application entry point.
+  * @retval int
+  */
 int main(void)
 {
-  uint8_t ucKeyCode;    /* 按键代码 */
+  bsp_Init();
 
-  bsp_Init();   /* 硬件初始化 */
+  /* Initialize all configured peripherals */
+//  MX_GPIO_Init();
+//  MX_I2C1_Init();
+//  MX_I2C2_Init();
+//  MX_SPI1_Init();
+  /* USER CODE BEGIN 2 */
 
-  PrintfLogo(); /* 打印例程名称和版本等信息 */
-  PrintfHelp(); /* 打印操作提示 */
+  /* USER CODE END 2 */
 
-
-  bsp_StartAutoTimer(0, 100); /* 启动1个100ms的自动重装的定时器，软件定时器0 */
-  bsp_StartAutoTimer(1, 100); /* 启动1个100ms的自动重装的定时器，软件定时器1 */
-
-
-  /* 进入主程序循环体 */
+  /* Infinite loop */
+  /* USER CODE BEGIN WHILE */
   while (1)
   {
-    bsp_Idle();   /* 这个函数在bsp.c文件。用户可以修改这个函数实现CPU休眠和喂狗 */
-
-    /* 判断软件定时器0是否超时 */
-    if (bsp_CheckTimer(0))
-    {
-      /* 每隔100ms 进来一次 */
-      bsp_LedToggle(1);
-    }
-
-    /* 判断软件定时器1超时 */
-    if (bsp_CheckTimer(1))
-    {
-      /* 每隔100ms 进来一次 */
-      bsp_LedToggle(2);
-    }
-
-    /* 判断软件定时器2是否超时 */
-    if (bsp_CheckTimer(2))
-    {
-      /* 单次模式，按下K1按键后，定时1秒进入 */
-      bsp_LedToggle(3);
-    }
-
-    /* 判断软件定时器3是否超时 */
-    if (bsp_CheckTimer(3))
-    {
-      /* 单次模式，按下K2按键后，定时2秒进入 */
-      bsp_LedToggle(4);
-    }
+    uint8_t ctrl=1;
+    /* USER CODE END WHILE */
+  uint8_t tmp[40]={12,2,3,4,5,6,7,8,9,10,\
+  11,12,13,14,15,16,17,18,19,20,21,22,\
+  23,24,25,26,27,28,29,30,31,32,33,34,\
+  35,36,37,38,39,40};
+//  ee_WriteBytes(&I2c1Handle, tmp,0,40);
 
 
-    /* 按键滤波和检测由后台systick中断服务程序实现，我们只需要调用bsp_GetKey读取键值即可。 */
-    ucKeyCode = bsp_GetKey(); /* 读取键值, 无键按下时返回 KEY_NONE = 0 */
-    if (ucKeyCode != KEY_NONE)
-    {
-      switch (ucKeyCode)
-      {
-        case KEY_DOWN_K1:     /* K1键按下，启动软件定时2，单次模式，定时0.5时间 */
-          printf("K1键按下\r\n");
-          bsp_StartTimer(2, 500);
-          break;
+  uint8_t tmp1[120]={0};
 
-        case KEY_DOWN_K2:     /* K2键按下，启动软件定时3，单次模式，定时1s时间  */
-          printf("K2键按下\r\n");
-          bsp_StartTimer(3, 1000);
-          break;
+  ee_WriteBytes(&I2c2Handle, tmp, 78, sizeof(tmp));
+//  if(ctrl)
+//  {
+//  do
+//  {
+//  if(HAL_I2C_Master_Transmit_IT(&I2c1Handle, EE_DEV_ADDR, tmp, 40) != HAL_OK)
+//  //  if(HAL_I2C_Mem_Write_IT(hi2c, DevAddress, MemAddress, MemAddSize, pData, Size)!= HAL_OK)
+//  {
+//    /* Error_Handler() function is called when error occurs. */
+//    Error_Handler(__FILE__, __LINE__);
+//    return 1;
+//  }
+//
+//  /*##-5- Wait for the end of the transfer #################################*/
+//  /*  Before starting a new communication transfer, you need to check the current
+//    state of the peripheral; if it�s busy you need to wait for the end of current
+//    transfer before starting a new one.
+//    For simplicity reasons, this example is just waiting till the end of the
+//    transfer, but application may perform other tasks while transfer operation
+//    is ongoing. */
+//  while (HAL_I2C_GetState(&I2c1Handle) != HAL_I2C_STATE_READY)
+//  {
+//  }
+//
+//  /* When Acknowledge failure occurs (Slave don't acknowledge it's address)
+//     Master restarts communication */
+//  }
+//  while(HAL_I2C_GetError(&I2c1Handle) == HAL_I2C_ERROR_AF);
+//  }
 
-        default:
-          /* 其它的键值不处理 */
-          break;
-      }
+  HAL_Delay(100);
+  ee_ReadBytes(&I2c2Handle, tmp1, 0, sizeof(tmp1));
+  HAL_Delay(100);
 
-    }
+//  do
+//  {
+//    if(HAL_I2C_Mem_Read_IT(&I2c1Handle, (uint16_t)EE_DEV_ADDR, 20, I2C_MEMADD_SIZE_8BIT, (uint8_t*)tmp1, sizeof(tmp1))!= HAL_OK)
+//    {
+//    /* Error_Handler() function is called when error occurs. */
+//    Error_Handler(__FILE__, __LINE__);
+//    }
+//
+//    /*  Before starting a new communication transfer, you need to check the current
+//      state of the peripheral; if it抯 busy you need to wait for the end of current
+//      transfer before starting a new one.
+//      For simplicity reasons, this example is just waiting till the end of the
+//      transfer, but application may perform other tasks while transfer operation
+//      is ongoing. */
+//    while (HAL_I2C_GetState(&I2c1Handle) != HAL_I2C_STATE_READY)
+//    {
+//    }
+//
+//    /* When Acknowledge failure occurs (Slave don't acknowledge it's address)
+//     Master restarts communication */
+//  }
+//  while(HAL_I2C_GetError(&I2c1Handle) == HAL_I2C_ERROR_AF);
+//  HAL_Delay(100);
+
+    /* USER CODE BEGIN 3 */
   }
+  /* USER CODE END 3 */
 }
 
-/*
-*********************************************************************************************************
-* 函 数 名: PrintfHelp
-* 功能说明: 打印操作提示
-* 形    参: 无
-* 返 回 值: 无
-*********************************************************************************************************
-*/
-static void PrintfHelp(void)
+/* USER CODE BEGIN 4 */
+
+/* USER CODE END 4 */
+
+#ifdef  USE_FULL_ASSERT
+/**
+  * @brief  Reports the name of the source file and the source line number
+  *         where the assert_param error has occurred.
+  * @param  file: pointer to the source file name
+  * @param  line: assert_param error line source number
+  * @retval None
+  */
+void assert_failed(uint8_t *file, uint32_t line)
 {
-  printf("操作提示:\r\n");
-  printf("1. 启动一个自动重装软件定时器，每100ms翻转一次LED1和LED2\r\n");
-  printf("2. 再启动一个自动重装软件定时器，每500ms翻转一次LED3和LED4\r\n");
+  /* USER CODE BEGIN 6 */
+  /* User can add his own implementation to report the file name and line number,
+     tex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+  /* USER CODE END 6 */
 }
+#endif /* USE_FULL_ASSERT */
 
-/*
-*********************************************************************************************************
-* 函 数 名: PrintfLogo
-* 功能说明: 打印例程名称和例程发布日期, 接上串口线后，打开PC机的超级终端软件可以观察结果
-* 形    参: 无
-* 返 回 值: 无
-*********************************************************************************************************
-*/
-static void PrintfLogo(void)
-{
-  printf("*************************************************************\n\r");
-
-  /* 检测CPU ID */
-  {
-    uint32_t CPU_Sn0, CPU_Sn1, CPU_Sn2;
-
-    CPU_Sn0 = *(__IO uint32_t*)(0x1FFF7A10);
-    CPU_Sn1 = *(__IO uint32_t*)(0x1FFF7A10 + 4);
-    CPU_Sn2 = *(__IO uint32_t*)(0x1FFF7A10 + 8);
-
-    printf("\r\nCPU : STM32F407IGT6, LQFP176, 主频: %dMHz\r\n", SystemCoreClock / 1000000);
-    printf("UID = %08X %08X %08X\n\r", CPU_Sn2, CPU_Sn1, CPU_Sn0);
-  }
-
-  printf("\n\r");
-  printf("*************************************************************\n\r");
-  printf("* 例程名称   : %s\r\n", EXAMPLE_NAME);  /* 打印例程名称 */
-  printf("* 例程版本   : %s\r\n", DEMO_VER);    /* 打印例程版本 */
-  printf("* 发布日期   : %s\r\n", EXAMPLE_DATE);  /* 打印例程日期 */
-
-  /* 打印ST的HAL库版本 */
-  printf("* HAL库版本  : V1.3.0 (STM32H7xx HAL Driver)\r\n");
-  printf("* \r\n"); /* 打印一行空格 */
-  printf("* QQ    : 1295744630 \r\n");
-  printf("* 旺旺  : armfly\r\n");
-  printf("* Email : armfly@qq.com \r\n");
-  printf("* 微信公众号: armfly_com \r\n");
-  printf("* 淘宝店: armfly.taobao.com\r\n");
-  printf("* Copyright www.armfly.com 安富莱电子\r\n");
-  printf("*************************************************************\n\r");
-}
-
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
